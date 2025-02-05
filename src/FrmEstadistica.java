@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
+import javax.swing.JList;
 
 public class FrmEstadistica extends JFrame {
 
@@ -19,7 +20,7 @@ public class FrmEstadistica extends JFrame {
         getContentPane().add(lblDato);
 
         JTextField txtDato=new JTextField();
-        txtDato.setBounds(110,10,100,25);
+        txtDato.setBounds(80,10,100,25);
         getContentPane().add(txtDato);
 
         JLabel lblDatos=new JLabel("Muestra");
@@ -33,6 +34,11 @@ public class FrmEstadistica extends JFrame {
         JButton btnQuitar=new JButton("Quitar");
         btnQuitar.setBounds(80,70,100,25);
         getContentPane().add(btnQuitar);
+
+        JList lstMuestra=new JList();
+        lstMuestra.setBounds(210,40,100,150);
+        getContentPane().add(lstMuestra);
+
 
 
 
