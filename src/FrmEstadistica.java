@@ -1,23 +1,29 @@
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import javax.swing.ListModel;
 import javax.swing.WindowConstants;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JComboBox;
 
 public class FrmEstadistica extends JFrame {
 
     JTextField txtDato;
+    @SuppressWarnings("rawtypes")
     JList lstMuestra;
+    JTextField txtEstadistica;
 
     public FrmEstadistica() {
 
-        setSize(600, 300);
+        setSize(400, 300);
         setTitle("Estadistica");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
@@ -43,8 +49,25 @@ public class FrmEstadistica extends JFrame {
         getContentPane().add(btnQuitar);
 
         lstMuestra = new JList();
-        lstMuestra.setBounds(210, 40, 100, 150);
-        getContentPane().add(lstMuestra);
+        JScrollPane spMuestra=new JScrollPane(lstMuestra);
+        spMuestra.setBounds(210, 40, 100, 150);
+        getContentPane().add(spMuestra);
+
+        JButton btnEstadistica = new JButton("Calcular");
+        btnEstadistica.setBounds(10,200,100,25);
+        getContentPane().add(btnEstadistica);
+
+        JComboBox cmbEstadistica = new JComboBox();
+        String[] opciones=new String[]{"Sumatoria","promedio","Desviacion","Maximo","Minimo","Moda"};
+        DefaultComboBoxModel mdlEstadistica=new DefaultComboBoxModel<>(opciones);
+        cmbEstadistica.setModel(mdlEstadistica);
+        cmbEstadistica.setBounds(110,200,100,25);
+        getContentPane().add(cmbEstadistica);
+
+        txtEstadistica = new JTextField();
+        txtEstadistica.setBounds(210,200,100,25);
+        getContentPane().add(txtEstadistica);
+
 
         // Ahora se va a asociar un evento a la GUI:
 
@@ -79,8 +102,11 @@ public class FrmEstadistica extends JFrame {
         }
         lstMuestra.setListData(strMuestra);
     }
-
+    
     private void quitarDato() {
-        JOptionPane.showMessageDialog(null, "Hizo clic en QUITAR");
-    }
+        double dato = Double.parseDouble(txtDato.getText());
+        totalDatos--;
+        muestra[totalDatos] = dato;
+        mostrarMuestra();
+        }
 }
