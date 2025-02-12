@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JComboBox;
@@ -20,7 +21,9 @@ public class FrmEstadistica extends JFrame {
     @SuppressWarnings("rawtypes")
     JList lstMuestra;
     JTextField txtEstadistica;
+    JComboBox cmbEstadistica;
 
+    @SuppressWarnings("rawtypes")
     public FrmEstadistica() {
 
         setSize(400, 300);
@@ -49,25 +52,24 @@ public class FrmEstadistica extends JFrame {
         getContentPane().add(btnQuitar);
 
         lstMuestra = new JList();
-        JScrollPane spMuestra=new JScrollPane(lstMuestra);
+        JScrollPane spMuestra = new JScrollPane(lstMuestra);
         spMuestra.setBounds(210, 40, 100, 150);
         getContentPane().add(spMuestra);
 
         JButton btnEstadistica = new JButton("Calcular");
-        btnEstadistica.setBounds(10,200,100,25);
+        btnEstadistica.setBounds(10, 200, 100, 25);
         getContentPane().add(btnEstadistica);
 
-        JComboBox cmbEstadistica = new JComboBox();
-        String[] opciones=new String[]{"Sumatoria","promedio","Desviacion","Maximo","Minimo","Moda"};
-        DefaultComboBoxModel mdlEstadistica=new DefaultComboBoxModel<>(opciones);
+        cmbEstadistica = new JComboBox();
+        String[] opciones = new String[] { "Sumatoria", "promedio", "Desviacion", "Maximo", "Minimo", "Moda" };
+        DefaultComboBoxModel mdlEstadistica = new DefaultComboBoxModel<>(opciones);
         cmbEstadistica.setModel(mdlEstadistica);
-        cmbEstadistica.setBounds(110,200,100,25);
+        cmbEstadistica.setBounds(110, 200, 100, 25);
         getContentPane().add(cmbEstadistica);
 
         txtEstadistica = new JTextField();
-        txtEstadistica.setBounds(210,200,100,25);
+        txtEstadistica.setBounds(210, 200, 100, 25);
         getContentPane().add(txtEstadistica);
-
 
         // Ahora se va a asociar un evento a la GUI:
 
@@ -82,19 +84,33 @@ public class FrmEstadistica extends JFrame {
                 quitarDato();
             }
         });
+
+        // Declarar el arreglo que almacenará los datos de la muestra.
+
+        btnEstadistica.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                calcularEstadistica();
+            }
+        });
     }
-    // Declarar el arreglo que almacenará los datos de la muestra.
 
     private double[] muestra = new double[1000];
     private int totalDatos = -1;
 
     private void agregarDato() {
-        double dato = Double.parseDouble(txtDato.getText());
-        totalDatos++;
-        muestra[totalDatos] = dato;
-        mostrarMuestra();
+        try {
+            double dato = Double.parseDouble(txtDato.getText());
+            totalDatos++;
+            muestra[totalDatos] = dato;
+            txtDato.setText("");
+            mostrarMuestra();
+        } catch (Exception ex) {
+            txtDato.setText("");
+            JOptionPane.showMessageDialog(null, "Ingresar solo valores numericos");
+        }
     }
 
+    @SuppressWarnings("unchecked")
     private void mostrarMuestra() {
         String[] strMuestra = new String[totalDatos + 1];
         for (int i = 0; i <= totalDatos; i++) {
@@ -102,11 +118,38 @@ public class FrmEstadistica extends JFrame {
         }
         lstMuestra.setListData(strMuestra);
     }
-    
+
     private void quitarDato() {
-        double dato = Double.parseDouble(txtDato.getText());
-        totalDatos--;
-        muestra[totalDatos] = dato;
-        mostrarMuestra();
+        int posicion = lstMuestra.getSelectedIndex();
+        if (posicion >= 0) {
+
+            // retirar la posicion del vector
+            for (int i = posicion; i < totalDatos; i++) {
+                muestra[i] = muestra[i + 1];
+            }
+            totalDatos--;
+            mostrarMuestra();
+        } else {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar la posicion");
         }
+    }
+
+    private double sumatoria() {
+        double suma = 0;
+        for (int i = 0; i <= totalDatos; i++) {
+            suma += muestra[i];
+        }
+        return suma;
+    }
+
+    @SuppressWarnings("unused")
+    private void calcularEstadistica() {
+        switch (cmbEstadistica.getSelectedIndex()) {
+            case 0:
+                txtEstadistica.setText(String.valueOf(sumatoria()));
+                break;
+            case 1:
+                break;
+        }
+    }
 }
