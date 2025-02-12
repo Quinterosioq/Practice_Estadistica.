@@ -106,7 +106,7 @@ public class FrmEstadistica extends JFrame {
             mostrarMuestra();
         } catch (Exception ex) {
             txtDato.setText("");
-            JOptionPane.showMessageDialog(null, "Ingresar solo valores numericos");
+            JOptionPane.showMessageDialog(null, "Debe especificar un valor numerico.");
         }
     }
 
@@ -122,7 +122,6 @@ public class FrmEstadistica extends JFrame {
     private void quitarDato() {
         int posicion = lstMuestra.getSelectedIndex();
         if (posicion >= 0) {
-
             // retirar la posicion del vector
             for (int i = posicion; i < totalDatos; i++) {
                 muestra[i] = muestra[i + 1];
@@ -142,6 +141,35 @@ public class FrmEstadistica extends JFrame {
         return suma;
     }
 
+    private double promedio() {
+        double promedioCalculando = 0;
+        if (totalDatos >= 0) {
+            promedioCalculando = sumatoria() / (totalDatos + 1);
+
+        }
+        return promedioCalculando;
+    }
+
+    private double DesviacionEstandar() {
+        double DesviacionDe = 0;
+        double promedioCalculando = promedio();
+        for (int i = 0; i <= totalDatos; i++) {
+            DesviacionDe += Math.abs(muestra[i] - promedioCalculando);
+        }
+        return totalDatos > 0 ? DesviacionDe / totalDatos:0;
+    // El signo de interrogacion funciona como un "entonces" remplazando la funcion de un if y un else.
+    }
+
+    private double Maximo() {
+        double Mayor = muestra[0];
+        for (int i = 1; i <= totalDatos; i++){
+            if(muestra[i]>Mayor){
+                Mayor = muestra[i];
+            }
+        }
+        return Mayor;
+    }
+
     @SuppressWarnings("unused")
     private void calcularEstadistica() {
         switch (cmbEstadistica.getSelectedIndex()) {
@@ -149,6 +177,13 @@ public class FrmEstadistica extends JFrame {
                 txtEstadistica.setText(String.valueOf(sumatoria()));
                 break;
             case 1:
+                txtEstadistica.setText(String.valueOf(promedio()));
+                break;
+            case 2:
+                txtEstadistica.setText(String.valueOf(DesviacionEstandar()));
+                break;
+            case 3:
+                txtEstadistica.setText(String.valueOf(Maximo()));
                 break;
         }
     }
